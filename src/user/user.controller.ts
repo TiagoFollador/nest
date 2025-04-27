@@ -1,13 +1,13 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
 import { UserRepository } from "./user.repository";
 import { CreateUserDTO } from "./dto/CreateUser.dto";
 import { UserEntity } from "./user.entity";
 import { v4 as uuid } from "uuid";
 import { ListUserDTO } from "./dto/ListUser.dto";
+import { UpdateUserDTO } from "./dto/UpdateUser.dto";
 
 @Controller('/users')
 export class UserController {
-
 
     constructor(private userRepository: UserRepository) {}
 
@@ -44,5 +44,24 @@ export class UserController {
             users: usersList
         }
         return data
+    }
+
+    @Put('/:id')
+    async updateUser(@Param('id') id: string, @Body() userData: UpdateUserDTO) {
+        try {
+            const updatedUser = await this.userRepository.update(id, userData);
+
+            return {
+                message: 'User updated sucessfully!',
+                user: updatedUser
+            }
+        } catch (error) {
+            return {
+                message: `Error: ${error.message}`,
+                code: 400
+            }
+        }
+
+        
     }
 }
