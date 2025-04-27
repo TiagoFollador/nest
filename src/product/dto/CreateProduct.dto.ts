@@ -1,7 +1,13 @@
-import { ArrayMinSize, IsArray, IsNotEmpty, IsNumber, IsPositive, MaxLength } from 'class-validator';
+import { ArrayMinSize, IsArray, IsNotEmpty, IsNumber, IsPositive, IsUUID, MaxLength } from 'class-validator';
 import { ProductCharacteristicsDTO } from './ProductCharacteristics.dto';
 
 export class CreateProductDTO {
+
+  @IsUUID(undefined, {
+    message: "user id is a required field",
+  })
+  userId: string;
+
   @IsNotEmpty({
     message: 'Name is a required field',
   })
