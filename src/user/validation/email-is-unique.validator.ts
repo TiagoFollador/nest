@@ -10,7 +10,10 @@ export class EmailIsUniqueValidator implements ValidatorConstraintInterface {
 
     async validate(value: any, validationArguments?: ValidationArguments): Promise<boolean> {
         const userEmailExists = await this.userRepository.emailAlredyCreated(value);
-        return !userEmailExists;
+        const userId = validationArguments?.object['id'];
+
+        if (userEmailExists && userId !== userEmailExists.id) return false;
+        return true;
     }
 }
 

@@ -18,7 +18,9 @@ export class UserRepository {
             user => user.email === email
         );
 
-        return user !== undefined;
+        const userNotFound = undefined
+
+        return user !== undefined ? user : userNotFound;
     }
 
     async update(id: string, userData: Partial<UserEntity>) {

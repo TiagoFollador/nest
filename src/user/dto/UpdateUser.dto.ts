@@ -23,4 +23,8 @@ export class UpdateUserDTO {
     })
     @IsOptional()
     password: string;
+    
+    @IsOptional()
+    id: string;
+
 }
