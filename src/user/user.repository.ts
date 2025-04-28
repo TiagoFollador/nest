@@ -5,6 +5,18 @@ import { UserEntity } from "./user.entity";
 export class UserRepository {
     private users: UserEntity[] = [];
 
+    private findUserById(id: string) {
+        const user = this.users.find(
+            user => user.id === id
+        );
+
+        if (!user) {
+            throw new Error(`User with id ${id} not found`);
+        }
+
+        return user;
+    }
+
     async save(user: UserEntity) {
         this.users.push(user);
     }
@@ -24,13 +36,7 @@ export class UserRepository {
     }
 
     async update(id: string, userData: Partial<UserEntity>) {
-        const user = this.users.find(
-            user => user.id === id
-        );
-
-        if (!user) {
-            throw new Error(`User with id ${id} not found`);
-        }
+        const user = this.findUserById(id);
 
         Object.entries(userData).forEach(([key, value]) => {
             if (key === "id") return;
@@ -38,5 +44,14 @@ export class UserRepository {
         })
 
         return user;
+    }
+    
+    async delete(id: string) {
+        const currentUser = this.findUserById(id);
+        this.users = this.users.filter(
+            user => user.id !== id
+        );
+
+        return currentUser;
     }
 }
