@@ -5,7 +5,7 @@ import { UserEntity } from './user.entity';
 export class UserRepository {
   private users: UserEntity[] = [];
 
-  private findUserById(id: string) {
+  async findUserById(id: string) {
     const user = this.users.find((user) => user.id === id);
     if (!user) {
       throw new Error(`User with id ${id} not found`);
