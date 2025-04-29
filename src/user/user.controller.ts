@@ -45,6 +45,21 @@ export class UserController {
         }
         return data
     }
+    
+    @Get('/:id')
+    async getUserById(@Param('id') id: string) {
+        const user =  await this.userRepository.findUserById(id);
+        
+        const userList = new ListUserDTO(
+            user.name,
+            user.id
+        );
+
+        const data = {
+            users: userList
+        }
+        return data
+    }
 
     @Put('/:id')
     async updateUser(@Param('id') id: string, @Body() userData: UpdateUserDTO) {
