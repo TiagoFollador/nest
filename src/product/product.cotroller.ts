@@ -1,9 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ProductRepository } from './product.repository';
 import { CreateProductDTO } from './dto/CreateProduct.dto';
 import { ProductEntity } from './product.entity';
 import { ListProductDTO } from './dto/ListProduct.dto';
-import { v4 as uuid } from "uuid";
+import { v4 as uuid } from 'uuid';
 
 @Controller('/products')
 export class ProductController {
@@ -68,39 +76,61 @@ export class ProductController {
     return data;
   }
 
-  @Put('/:id')
-  async updateProduct(@Param('id') id:string, @Body() productData: CreateProductDTO) {
-      try {
-          const updatedProduct = await this.productRepository.update(id, productData);
+  @Get('/:id')
+  async getProductById(@Param('id') id: string) {
+    try {
+      const product = await this.productRepository.findProductById(id);
+      return {
+        message: 'Product found sucessfully!',
+        product: product
+    };
+    } catch (error) {
+      return {
+        message: `Error: ${error.message}`,
+        code: 400,
+      };
+    }
+  }
 
-          return {
-            message: 'Product updated sucessfully!',	
-            product: updatedProduct
-          }
-      } catch (error) {
-        return {
-            message: `Error: ${error.message}`,
-            code: 400
-        }
-      }
+  @Put('/:id')
+  async updateProduct(
+    @Param('id') id: string,
+    @Body() productData: CreateProductDTO,
+  ) {
+    try {
+      const updatedProduct = await this.productRepository.update(
+        id,
+        productData,
+      );
+
+      return {
+        message: 'Product updated sucessfully!',
+        product: updatedProduct,
+      };
+    } catch (error) {
+      return {
+        message: `Error: ${error.message}`,
+        code: 400,
+      };
+    }
   }
 
   @Delete('/:id')
   async deleteProduct(@Param('id') id: string) {
     try {
-        const deletedProduct = await this.productRepository.delete(id);
+      const deletedProduct = await this.productRepository.delete(id);
 
-        if (deletedProduct) {
-            return {
-                message: "Product deleted sucessfully!",
-                code: 200
-            }
-        }
-    } catch (error) {
+      if (deletedProduct) {
         return {
-            message: `Error: ${error.message}`,
-            code: 400
-        }
+          message: 'Product deleted sucessfully!',
+          code: 200,
+        };
+      }
+    } catch (error) {
+      return {
+        message: `Error: ${error.message}`,
+        code: 400,
+      };
     }
   }
 }
