@@ -9,7 +9,7 @@ export class ProductRepository {
         this.products.push(product);
     }
 
-    list() {
+    async list() {
         return this.products
     }
 }
