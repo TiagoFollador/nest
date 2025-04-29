@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsUrl } from "class-validator";
 
-export class ProductCharacteristicsDTO {
+export class ProductImages {
     @IsUrl(undefined, {
         message: "Image url is a required field"
     })

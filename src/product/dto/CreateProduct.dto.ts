@@ -1,5 +1,6 @@
 import { ArrayMinSize, IsArray, IsNotEmpty, IsNumber, IsPositive, IsUUID, MaxLength } from 'class-validator';
 import { ProductCharacteristicsDTO } from './ProductCharacteristics.dto';
+import { ProductImages } from './ProductImages.dto';
 
 export class CreateProductDTO {
 
@@ -54,7 +55,7 @@ export class CreateProductDTO {
   @ArrayMinSize(1, {
     message: 'Product must have at least 1 image',
   })
-  images: ProductCharacteristicsDTO[];
+  images: ProductImages[];
 
   @IsNotEmpty({
     message: 'Category is a required field',
