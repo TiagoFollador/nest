@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ProductRepository } from './product.repository';
 import { CreateProductDTO } from './dto/CreateProduct.dto';
 import { ProductEntity } from './product.entity';
@@ -68,5 +68,20 @@ export class ProductController {
     return data;
   }
 
-  
+  @Put('/:id')
+  async updateProduct(@Param('id') id:string, @Body() productData: CreateProductDTO) {
+      try {
+          const updatedProduct = await this.productRepository.update(id, productData);
+
+          return {
+            message: 'Product updated sucessfully!',	
+            product: updatedProduct
+          }
+      } catch (error) {
+        return {
+            message: `Error: ${error.message}`,
+            code: 400
+        }
+      }
+  }
 }
