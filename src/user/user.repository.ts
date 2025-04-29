@@ -1,57 +1,47 @@
-import { Injectable } from "@nestjs/common";
-import { UserEntity } from "./user.entity";
+import { Injectable } from '@nestjs/common';
+import { UserEntity } from './user.entity';
 
 @Injectable()
 export class UserRepository {
-    private users: UserEntity[] = [];
+  private users: UserEntity[] = [];
 
-    private findUserById(id: string) {
-        const user = this.users.find(
-            user => user.id === id
-        );
-
-        if (!user) {
-            throw new Error(`User with id ${id} not found`);
-        }
-
-        return user;
+  private findUserById(id: string) {
+    const user = this.users.find((user) => user.id === id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
     }
+    return user;
+  }
 
-    async save(user: UserEntity) {
-        this.users.push(user);
-    }
+  async save(user: UserEntity) {
+    this.users.push(user);
+  }
 
-    async list() {
-       return this.users;
-    }
+  async list() {
+    return this.users;
+  }
 
-    async emailAlredyCreated(email: string) {
-        const user = this.users.find(
-            user => user.email === email
-        );
+  async emailAlredyCreated(email: string) {
+    const user = this.users.find((user) => user.email === email);
+    const userNotFound = undefined;
+    return user !== undefined ? user : userNotFound;
+  }
 
-        const userNotFound = undefined
+  async update(id: string, userData: Partial<UserEntity>) {
+    const user = this.findUserById(id);
 
-        return user !== undefined ? user : userNotFound;
-    }
+    Object.entries(userData).forEach(([key, value]) => {
+      if (key === 'id') return;
+      user[key] = value;
+    });
 
-    async update(id: string, userData: Partial<UserEntity>) {
-        const user = this.findUserById(id);
+    return user;
+  }
 
-        Object.entries(userData).forEach(([key, value]) => {
-            if (key === "id") return;
-            user[key] = value
-        })
+  async delete(id: string) {
+    const currentUser = this.findUserById(id);
+    this.users = this.users.filter((user) => user.id !== id);
 
-        return user;
-    }
-    
-    async delete(id: string) {
-        const currentUser = this.findUserById(id);
-        this.users = this.users.filter(
-            user => user.id !== id
-        );
-
-        return currentUser;
-    }
+    return currentUser;
+  }
 }
