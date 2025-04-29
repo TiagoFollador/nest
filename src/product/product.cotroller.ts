@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ProductRepository } from './product.repository';
 import { CreateProductDTO } from './dto/CreateProduct.dto';
 import { ProductEntity } from './product.entity';
@@ -83,5 +83,24 @@ export class ProductController {
             code: 400
         }
       }
+  }
+
+  @Delete('/:id')
+  async deleteProduct(@Param('id') id: string) {
+    try {
+        const deletedProduct = await this.productRepository.delete(id);
+
+        if (deletedProduct) {
+            return {
+                message: "Product deleted sucessfully!",
+                code: 200
+            }
+        }
+    } catch (error) {
+        return {
+            message: `Error: ${error.message}`,
+            code: 400
+        }
+    }
   }
 }
